@@ -3,7 +3,7 @@ import { execSync } from "child_process";
 var path = require("path");
 const file: string = fs.readFileSync("input.txt", "utf8");
 const fileArray = file.split("\n");
-const filePath: string[] = ["teesting/"];
+const filePath: string[] = ["testfolder/"];
 
 export const setUpFileStructure = () => {
   fileArray.map((element, index) => {
@@ -26,13 +26,15 @@ export const setUpFileStructure = () => {
 };
 
 let resultOne = 0;
-
-function traverseDir(dir): number {
+let resultTwo = 10000000000;
+const totalSpaceLeft = 70000000 - countTotalDirectorySize("testFolder");
+const requiredSizeForDelete = 30000000 - totalSpaceLeft;
+function countTotalDirectorySize(dir): number {
   let result = 0;
   fs.readdirSync(dir).forEach((file) => {
     let fullPath = path.join(dir, file);
     if (fs.lstatSync(fullPath).isDirectory()) {
-      result += traverseDir(fullPath);
+      result += countTotalDirectorySize(fullPath);
     } else {
       const fileName = fullPath.split("/").pop().split("-")[0];
       result += +fileName;
@@ -41,7 +43,11 @@ function traverseDir(dir): number {
   if (result < 100000) {
     resultOne += result;
   }
+  if (result > requiredSizeForDelete && result < resultTwo) {
+    resultTwo = result;
+  }
   return result;
 }
-traverseDir("teesting");
+countTotalDirectorySize("testFolder");
 console.log(resultOne);
+console.log(resultTwo);
