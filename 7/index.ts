@@ -17,9 +17,10 @@ fileArray.map((element, index) => {
   if (elementTwo === "cd") {
     if (elementThree === "..") {
       filePath.pop();
+      console.log(filePath);
     } else {
       filePath.push(elementThree);
+      console.log(filePath);
     }
   }
-  console.log(filePath);
 });
